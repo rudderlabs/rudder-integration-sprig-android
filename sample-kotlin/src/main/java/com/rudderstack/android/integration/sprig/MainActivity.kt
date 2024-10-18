@@ -38,5 +38,9 @@ class MainActivity: AppCompatActivity() {
                     .putValue("key_2", "value_2")
             )
         }
+
+        findViewById<Button>(R.id.logout_button).setOnClickListener {
+            MainApplication.rudderClient.reset(false)
+        }
     }
 }
