@@ -141,6 +141,7 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
 
                 @Override
                 public void onActivityDestroyed(@NonNull Activity activity) {
+                    // clearing the activity instance on onDestroy
                     if (activity == currentActivity) {
                         currentActivity = null;
                     }
@@ -179,22 +180,26 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
 
         Map<String, Object> traits = message.getTraits();
 
-        if (traits != null) {
-            if (traits.containsKey(EMAIL_KEY)) {
-                String email = (String) traits.get(EMAIL_KEY);
+        processSprigAttributes(traits);
+    }
+
+    private void processSprigAttributes(Map<String, Object> attributes) {
+        if (attributes != null) {
+            if (attributes.containsKey(EMAIL_KEY)) {
+                String email = (String) attributes.get(EMAIL_KEY);
                 if (email != null) {
                     this.sprig.setEmailAddress(email);
                 }
             }
-            for (Map.Entry<String, Object> entry : traits.entrySet()) {
+            for (Map.Entry<String, Object> entry : attributes.entrySet()) {
                 if (Objects.equals(entry.getKey(), EMAIL_KEY)) {
                     continue;
                 }
                 if (entry.getKey().length() < 256 && !entry.getKey().startsWith("!")) {
                     if (entry.getValue() instanceof String) {
                         this.sprig.setVisitorAttribute(entry.getKey(), (String) entry.getValue());
-                    } else if (entry.getValue() instanceof Integer) {
-                        this.sprig.setVisitorAttribute(entry.getKey(), (Integer) entry.getValue());
+                    } else if (entry.getValue() instanceof Number) {
+                        this.sprig.setVisitorAttribute(entry.getKey(), getInt(entry.getValue()));
                     } else if (entry.getValue() instanceof Boolean) {
                         this.sprig.setVisitorAttribute(entry.getKey(), (Boolean) entry.getValue());
                     } else {
@@ -205,5 +210,15 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
                 }
             }
         }
+    }
+
+    private Integer getInt(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        return 0;
     }
 }
