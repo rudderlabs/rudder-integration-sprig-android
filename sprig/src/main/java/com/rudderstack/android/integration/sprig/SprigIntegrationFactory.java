@@ -18,6 +18,7 @@ import com.rudderstack.android.sdk.core.RudderMessage;
 import com.userleap.EventPayload;
 import com.userleap.Sprig;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -186,16 +187,21 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
                 }
             }
             for (Map.Entry<String, Object> entry : traits.entrySet()) {
-                if (!Objects.equals(entry.getKey(), EMAIL_KEY)) {
+                if (Objects.equals(entry.getKey(), EMAIL_KEY)) {
+                    continue;
+                }
+                if (entry.getKey().length() < 256 && !entry.getKey().startsWith("!")) {
                     if (entry.getValue() instanceof String) {
                         this.sprig.setVisitorAttribute(entry.getKey(), (String) entry.getValue());
-                    }
-                    if (entry.getValue() instanceof Integer) {
+                    } else if (entry.getValue() instanceof Integer) {
                         this.sprig.setVisitorAttribute(entry.getKey(), (Integer) entry.getValue());
-                    }
-                    if (entry.getValue() instanceof Boolean) {
+                    } else if (entry.getValue() instanceof Boolean) {
                         this.sprig.setVisitorAttribute(entry.getKey(), (Boolean) entry.getValue());
+                    } else {
+                        RudderLogger.logWarn(String.format(Locale.US, "%s is not a valid property value. Only String, Bool, Double and Int are accepted as valid attributes. Ignoring property.", entry.getValue()));
                     }
+                } else {
+                    RudderLogger.logWarn(String.format(Locale.US, "%s is not a valid property name. Property names must be less than 256 characters and cannot start with a '!'. Ignoring property.", entry.getKey()));
                 }
             }
         }
