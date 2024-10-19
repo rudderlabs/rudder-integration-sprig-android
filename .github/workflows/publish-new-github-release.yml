@@ -3,7 +3,7 @@ name: Publish new github release
 on:
   pull_request:
     branches:
-      - master
+      - main
     types:
       - closed
   workflow_dispatch:
@@ -56,7 +56,7 @@ jobs:
           DEBUG=conventional-github-releaser npx conventional-github-releaser -p angular
 
       - name: Delete release branch
-        uses: koj-co/delete-merged-action@master
+        uses: koj-co/delete-merged-action@main
         if: startsWith(github.event.pull_request.head.ref, 'release/')
         with:
           branches: 'release/*'

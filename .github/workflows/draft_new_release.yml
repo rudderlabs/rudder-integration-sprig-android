@@ -33,8 +33,8 @@ jobs:
           source_branch_name=${GITHUB_REF##*/}
           release_type=release
 
-          git fetch origin master --depth=1
-          git merge origin/master
+          git fetch origin main --depth=1
+          git merge origin/main
           current_version=$(cat gradle.properties | grep "VERSION_NAME" | cut -d'=' -f2)
           
           npm ci
@@ -66,12 +66,12 @@ jobs:
         run: |
           git push
 
-      - name: Create pull request into master
+      - name: Create pull request into main
         uses: repo-sync/pull-request@v2
         with:
           source_branch: ${{ steps.create-release.outputs.branch_name }}
-          destination_branch: 'master'
+          destination_branch: 'main'
           github_token: ${{ secrets.PAT }}
-          pr_title: "chore(release): pulling ${{ steps.create-release.outputs.branch_name }} into master"
+          pr_title: "chore(release): pulling ${{ steps.create-release.outputs.branch_name }} into main"
           pr_body:  ":crown: *An automated PR*"
           pr_reviewer: "@rudderlabs/sdk-android"
