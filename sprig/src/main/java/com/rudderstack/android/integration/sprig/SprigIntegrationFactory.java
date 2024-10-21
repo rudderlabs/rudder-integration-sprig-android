@@ -68,7 +68,7 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
     }
 
     public interface SprigFactory extends Factory {
-        void setCurrentFragmentActivity(@Nullable FragmentActivity activity);
+        void setFragmentActivity(@Nullable FragmentActivity activity);
     }
 
     public static final SprigFactory FACTORY = new SprigFactory() {
@@ -83,7 +83,7 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
         }
 
         @Override
-        public void setCurrentFragmentActivity(@Nullable FragmentActivity activity) {
+        public void setFragmentActivity(@Nullable FragmentActivity activity) {
             currentActivity = activity;
         }
     };
