@@ -19,7 +19,6 @@ jobs:
           outdated-dependency-names: "com.userleap:userleap-android-sdk"
           directory: "sprig/build.gradle"
           title: "fix: update Sprig SDK to the latest version"
-          assignee: "@rudderlabs/sdk-android"
           labels: "outdatedDependency"
           color: "FBCA04"
         env:
