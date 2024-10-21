@@ -11,7 +11,7 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        SprigIntegrationFactory.FACTORY.setCurrentFragmentActivity(this@MainActivity)
+        SprigIntegrationFactory.FACTORY.setFragmentActivity(this@MainActivity)
 
         findViewById<Button>(R.id.identify_button).setOnClickListener {
             MainApplication.rudderClient.identify(
@@ -42,5 +42,10 @@ class MainActivity: AppCompatActivity() {
         findViewById<Button>(R.id.logout_button).setOnClickListener {
             MainApplication.rudderClient.reset(false)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SprigIntegrationFactory.FACTORY.setFragmentActivity(null)
     }
 }
