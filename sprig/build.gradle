@@ -31,3 +31,6 @@ dependencies {
     implementation libs.material
     testImplementation libs.junit
 }
+
+apply from: rootProject.file('gradle/mvn-publish.gradle')
+apply from: rootProject.file('gradle/codecov.gradle')
