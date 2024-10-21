@@ -11,7 +11,7 @@ publishing {
             version getVersionName()
 
 //            if (project.getName() == "android") {
-                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
 //            }
 //            else {
 //                artifact("$buildDir/libs/${project.getName()}-${version}.jar")
@@ -81,6 +81,12 @@ signing {
     def signingPassword = System.getenv("SIGNING_KEY_PASSWORD")
     useInMemoryPgpKeys(signingKeyId,signingKey, signingPassword)
     sign publishing.publications
+}
+
+if(POM_PACKAGING == "aar"){
+    tasks.named("signReleasePublication").configure { dependsOn("bundleReleaseAar") }
+}else{
+    tasks.named("signReleasePublication").configure { dependsOn("jar") }
 }
 
 publish.dependsOn build
