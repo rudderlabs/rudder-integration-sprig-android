@@ -1,10 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
+
+Properties properties = new Properties()
+if (project.rootProject.file('sample-kotlin/local.properties').canRead()) {
+    properties.load(project.rootProject.file("sample-kotlin/local.properties").newDataInputStream())
 }
 
 android {
     namespace 'com.rudderstack.android.integration.sprig'
     compileSdk 34
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.rudderstack.android.integration.sprig"
@@ -14,6 +24,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "DATA_PLANE_URL", properties.getProperty('dataplaneUrl', "\"https://hosted.rudderlabs.com\""))
+        buildConfigField("String", "CONTROL_PLANE_URL", properties.getProperty('controlplaneUrl', "\"https://api.rudderstack.com\""))
+        buildConfigField("String", "WRITE_KEY", properties.getProperty('writeKey', "\"\""))
     }
 
     buildTypes {
@@ -26,10 +39,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
 
     implementation libs.appcompat
     implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.core.ktx
+
+    implementation libs.rudderstack.core
+    implementation project(':sprig')
 }
