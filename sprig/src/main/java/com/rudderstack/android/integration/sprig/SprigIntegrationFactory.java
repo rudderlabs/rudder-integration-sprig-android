@@ -26,7 +26,7 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
 
     // String constants
     private static final String SPRIG_KEY = "Sprig";
-    private static final String ENVIRONMENT_ID = "ENVIRONMENT_ID";
+    private static final String ENVIRONMENT_ID = "environmentId";
     private static final String EMAIL_KEY = "email";
 
     @Nullable
