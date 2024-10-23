@@ -29,6 +29,11 @@ dependencies {
 
     implementation libs.appcompat
     implementation libs.material
+    // RudderStack SDK
+    compileOnly libs.rudderstack.core
+    // Sprig dependency
+    implementation libs.userleap.android.sdk
+
     testImplementation libs.junit
 }
 
