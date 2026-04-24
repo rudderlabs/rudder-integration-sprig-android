@@ -5,10 +5,16 @@ on:
     - cron: '0 0 * * 1'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-outdated-dependencies:
     runs-on: macos-latest
     name: Check outdated dependencies and create issue if it doesn't exist
+    permissions:
+      contents: read
+      issues: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
