@@ -160,7 +160,7 @@ public class SprigIntegrationFactory extends RudderIntegration<Sprig> {
         }
         Map<String, Object> properties = message.getProperties();
 
-        EventPayload payload = new EventPayload(eventName, null, null, properties, null, null);
+        EventPayload payload = new EventPayload(eventName, null, null, properties, null, null, null);
 
         if (currentActivity == null) {
             this.sprig.track(payload);
