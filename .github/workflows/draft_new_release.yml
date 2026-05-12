@@ -43,13 +43,11 @@ jobs:
       # Calculate the next release version based on conventional semantic release
       - name: Calculate release version and create branch
         id: create-release
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           source_branch_name=${GITHUB_REF##*/}
           release_type=release
 
-          git fetch origin main
+          git fetch origin main --depth=1
           git merge origin/main
           current_version=$(cat gradle.properties | grep "VERSION_NAME" | cut -d'=' -f2)
 
@@ -65,20 +63,11 @@ jobs:
           echo "Release type is $release_type"
           echo "New version is $new_version"
           echo "New release branch name is $branch_name"
+          git checkout -b "$branch_name"
 
           echo "source_branch_name=$source_branch_name" >> $GITHUB_OUTPUT
           echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
-
-      - name: Create release branch via GitHub API
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-        run: |
-          BASE_SHA=$(git rev-parse origin/main)
-          gh api repos/${{ github.repository }}/git/refs \
-            --method POST \
-            -f ref="refs/heads/${{ steps.create-release.outputs.branch_name }}" \
-            -f sha="$BASE_SHA"
 
       - name: Generate changelog and bump version
         run: |
