@@ -15,7 +15,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/feat/') || startsWith(github.ref, 'refs/heads/fix/')
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
         with:
           egress-policy: audit
 
@@ -49,7 +49,7 @@ jobs:
           source_branch_name=${GITHUB_REF##*/}
           release_type=release
 
-          git fetch origin main --depth=1
+          git fetch origin main
           git merge origin/main
           current_version=$(cat gradle.properties | grep "VERSION_NAME" | cut -d'=' -f2)
 
